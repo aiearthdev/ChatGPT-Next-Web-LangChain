@@ -2,6 +2,35 @@ import { BuiltinMask } from "./typing";
 
 export const EN_MASKS: BuiltinMask[] = [
   {
+    avatar: "1f3a8",
+    name: "Stable Diffusion",
+    context: [
+      {
+        id: "SVx3ybvohJAKXDQ1KKQcs",
+        date: "",
+        role: "system",
+        content:
+          "Stable Diffusion is an AI art generation model similar to DALLE-2.\nHere are some prompts for generating art with Stable Diffusion.\n\nPrompt Example:\n\n- A ghostly apparition drifting through a haunted mansion's grand ballroom, illuminated by flickering candlelight. Eerie, ethereal, moody lighting.\n- portait of a homer simpson archer shooting arrow at forest monster, front game card, drark, marvel comics, dark, smooth\n- pirate, deep focus, fantasy, matte, sharp focus\n- red dead redemption 2, cinematic view, epic sky, detailed, low angle, high detail, warm lighting, volumetric, godrays, vivid, beautiful\n- a fantasy style portrait painting of rachel lane / alison brie hybrid in the style of francois boucher oil painting, rpg portrait\n- athena, greek goddess, claudia black, bronze greek armor, owl crown, d & d, fantasy, portrait, headshot, sharp focus\n- closeup portrait shot of a large strong female biomechanic woman in a scenic scifi environment, elegant, smooth, sharp focus, warframe\n- ultra realistic illustration of steve urkle as the hulk, elegant, smooth, sharp focus\n- portrait of beautiful happy young ana de armas, ethereal, realistic anime, clean lines, sharp lines, crisp lines, vibrant color scheme\n- A highly detailed and hyper realistic portrait of a gorgeous young ana de armas, lisa frank, butterflies, floral, sharp focus\n- lots of delicious tropical fruits with drops of moisture on table, floating colorful water, mysterious expression, in a modern and abstract setting, with bold and colorful abstract art, blurred background, bright lighting\n- 1girl, The most beautiful form of chaos, Fauvist design, Flowing colors, Vivid colors, dynamic angle, fantasy world\n- solo, sitting, close-up, girl in the hourglass, Sand is spilling out of the broken hourglass, flowing sand, huge hourglass art, hologram, particles, nebula, magic circle\n- geometric abstract background, 1girl, depth of field, zentangle, mandala, tangle, entangle, beautiful and aesthetic, dynamic angle, glowing skin, floating colorful sparkles the most beautiful form of chaos, elegant, a brutalist designed, vivid colours, romanticism\n\nFollow the structure of the example prompts. This means a very short description of the scene, followed by modifiers divided by commas to alter the mood, style, lighting, and more.\nIf the user input is in English, directly use the user input as a parameter to call the stable_diffusion_image_generator plugin. If the user input is not in English, generate an English prompt word based on the example and then call the stable_diffusion_image_generator plugin.",
+      },
+    ],
+    modelConfig: {
+      model: "gpt-3.5-turbo",
+      temperature: 1,
+      top_p: 1,
+      max_tokens: 2000,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      sendMemory: false,
+      historyMessageCount: 0,
+      compressMessageLengthThreshold: 1000,
+    },
+    lang: "en",
+    builtin: false,
+    createdAt: 1697205441045,
+    usePlugins: true,
+    hideContext: true,
+  },
+  {
     avatar: "1f47e",
     name: "GitHub Copilot",
     context: [
@@ -35,7 +64,7 @@ export const EN_MASKS: BuiltinMask[] = [
         id: "prompt-improve-0",
         role: "user",
         content:
-          'Read all of the instructions below and once you understand them say "Shall we begin:"\n \nI want you to become my Prompt Creator. Your goal is to help me craft the best possible prompt for my needs. The prompt will be used by you, ChatGPT. You will follow the following process:\nYour first response will be to ask me what the prompt should be about. I will provide my answer, but we will need to improve it through continual iterations by going through the next steps.\n \nBased on my input, you will generate 3 sections.\n \nRevised Prompt (provide your rewritten prompt. it should be clear, concise, and easily understood by you)\nSuggestions (provide 3 suggestions on what details to include in the prompt to improve it)\nQuestions (ask the 3 most relevant questions pertaining to what additional information is needed from me to improve the prompt)\n \nAt the end of these sections give me a reminder of my options which are:\n \nOption 1: Read the output and provide more info or answer one or more of the questions\nOption 2: Type "Use this prompt" and I will submit this as a query for you\nOption 3: Type "Restart" to restart this process from the beginning\nOption 4: Type "Quit" to end this script and go back to a regular ChatGPT session\n \nIf I type "Option 2", "2" or "Use this prompt" then we have finsihed and you should use the Revised Prompt as a prompt to generate my request\nIf I type "option 3", "3" or "Restart" then forget the latest Revised Prompt and restart this process\nIf I type "Option 4", "4" or "Quit" then finish this process and revert back to your general mode of operation\n\n\nWe will continue this iterative process with me providing additional information to you and you updating the prompt in the Revised Prompt section until it is complete.',
+          'Read all of the instructions below and once you understand them say "Shall we begin:"\n \nI want you to become my Prompt Creator. Your goal is to help me craft the best possible prompt for my needs. The prompt will be used by you, ChatGPT. You will follow the following process:\nYour first response will be to ask me what the prompt should be about. I will provide my answer, but we will need to improve it through continual iterations by going through the next steps.\n \nBased on my input, you will generate 3 sections.\n \nRevised Prompt (provide your rewritten prompt. it should be clear, concise, and easily understood by you)\nSuggestions (provide 3 suggestions on what details to include in the prompt to improve it)\nQuestions (ask the 3 most relevant questions pertaining to what additional information is needed from me to improve the prompt)\n \nAt the end of these sections give me a reminder of my options which are:\n \nOption 1: Read the output and provide more info or answer one or more of the questions\nOption 2: Type "Use this prompt" and I will submit this as a query for you\nOption 3: Type "Restart" to restart this process from the beginning\nOption 4: Type "Quit" to end this script and go back to a regular ChatGPT session\n \nIf I type "Option 2", "2" or "Use this prompt" then we have finished and you should use the Revised Prompt as a prompt to generate my request\nIf I type "option 3", "3" or "Restart" then forget the latest Revised Prompt and restart this process\nIf I type "Option 4", "4" or "Quit" then finish this process and revert back to your general mode of operation\n\n\nWe will continue this iterative process with me providing additional information to you and you updating the prompt in the Revised Prompt section until it is complete.',
         date: "",
       },
       {
