@@ -23,9 +23,13 @@ declare global {
       CUSTOM_MODELS?: string; // to control custom models
 
       // azure only
-      AZURE_URL?: string; // https://{azure-url}/openai/deployments/{deploy-name}
+      AZURE_URL?: string; // https://{azure-url}/openai/deployments
       AZURE_API_KEY?: string;
       AZURE_API_VERSION?: string;
+
+      // google only
+      GOOGLE_API_KEY?: string;
+      GOOGLE_BASE_URL?: string;
     }
   }
 }
@@ -61,6 +65,7 @@ export const getServerSideConfig = () => {
   }
 
   const isAzure = !!process.env.AZURE_URL;
+  const isGoogle = !!process.env.GOOGLE_API_KEY;
 
   const apiKeyEnvVar = process.env.OPENAI_API_KEY ?? "";
   const apiKeys = apiKeyEnvVar.split(",").map((v) => v.trim());
@@ -80,6 +85,10 @@ export const getServerSideConfig = () => {
     azureApiKey: process.env.AZURE_API_KEY,
     azureApiVersion: process.env.AZURE_API_VERSION,
 
+    isGoogle,
+    googleApiKey: process.env.GOOGLE_API_KEY,
+    googleBaseUrl: process.env.GOOGLE_BASE_URL,
+
     needCode: ACCESS_CODES.size > 0,
     code: process.env.CODE,
     codes: ACCESS_CODES,
@@ -92,5 +101,10 @@ export const getServerSideConfig = () => {
     hideBalanceQuery: !process.env.ENABLE_BALANCE_QUERY,
     disableFastLink: !!process.env.DISABLE_FAST_LINK,
     customModels,
+
+    isStoreFileToLocal:
+      !!process.env.NEXT_PUBLIC_ENABLE_NODEJS_PLUGIN &&
+      !process.env.R2_ACCOUNT_ID &&
+      !process.env.S3_ENDPOINT,
   };
 };

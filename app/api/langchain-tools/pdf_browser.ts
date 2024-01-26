@@ -1,12 +1,13 @@
 import axiosMod, { AxiosStatic } from "axios";
 import { WebPDFLoader } from "langchain/document_loaders/web/pdf";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { Tool } from "langchain/tools";
+import { Tool } from "@langchain/core/tools";
 import {
   RecursiveCharacterTextSplitter,
   TextSplitter,
 } from "langchain/text_splitter";
-import { CallbackManagerForToolRun } from "langchain/callbacks";
+
+import { CallbackManagerForToolRun } from "@langchain/core/callbacks/manager";
 import { BaseLanguageModel } from "langchain/dist/base_language";
 import { formatDocumentsAsString } from "langchain/util/document";
 import { Embeddings } from "langchain/dist/embeddings/base.js";
@@ -123,7 +124,7 @@ export class PDFBrowser extends Tool {
         undefined,
         runManager?.getChild("vectorstore"),
       );
-      context = formatDocumentsAsString(results, "\n");
+      context = formatDocumentsAsString(results);
     }
 
     const input = `Text:${context}\n\nI need ${
