@@ -174,12 +174,12 @@ export function SideBar(props: { className?: string }) {
     >
       <div className={styles["sidebar-header"]} data-tauri-drag-region>
         <div className={styles["sidebar-title"]} data-tauri-drag-region>
-          智慧地球（AI•Earth）社区
+          AGI Chat
         </div>
         <div className={styles["sidebar-sub-title"]}>
-          AIO智能服务平台<a href="https://aio.aiearth.dev">aio.aiearth.dev</a>AIGC免费体验站领取永久免费GPT密码(不定时更新)！<a href="https://pl6pt5c18e.feishu.cn/docx/GkuNdGMNVoS9gGx1JhOcdNK7nqc">【社区福利❤使用说明🚀】</a>
-          <li>加入前沿科技交流社群(微信:AIEarth_Phoenixash)永久免费体验GPT-4！</li>
-          <li>加入GPT功能交流社群(QQ:949698745)领取每周专属平台通用智能服务惊喜福利！</li>
+          AIO智能服务平台<a href="https://aio.aiearth.dev">aio.aiearth.dev</a>AGI免费体验站领取永久免费GPT密码(不定时更新)！<a href="https://pl6pt5c18e.feishu.cn/docx/GkuNdGMNVoS9gGx1JhOcdNK7nqc">【社区福利❤使用说明🚀】</a>
+          <li>加入前沿科技交流社群永久免费体验GPT-4！(微信:AIEarth_Phoenixash | AIEarth_AIO)</li>
+          <li>加入AGI通用智能福利交流社群(QQ:949698745)领取每周专属惊喜福利！</li>
         </div>
         <div className={styles["sidebar-logo"] + " no-dark"}>
           <ChatGptIcon />
