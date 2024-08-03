@@ -1,3 +1,4 @@
+import { ServiceProvider } from "@/app/constant";
 import { ModalConfigValidator, ModelConfig } from "../store";
 
 import Locale from "../locales";
@@ -10,25 +11,25 @@ export function ModelConfigList(props: {
   updateConfig: (updater: (config: ModelConfig) => void) => void;
 }) {
   const allModels = useAllModels();
+  const value = `${props.modelConfig.model}@${props.modelConfig?.providerName}`;
 
   return (
     <>
       <ListItem title={Locale.Settings.Model}>
         <Select
-          value={props.modelConfig.model}
+          value={value}
           onChange={(e) => {
-            props.updateConfig(
-              (config) =>
-                (config.model = ModalConfigValidator.model(
-                  e.currentTarget.value,
-                )),
-            );
+            const [model, providerName] = e.currentTarget.value.split("@");
+            props.updateConfig((config) => {
+              config.model = ModalConfigValidator.model(model);
+              config.providerName = providerName as ServiceProvider;
+            });
           }}
         >
           {allModels
             .filter((v) => v.available)
             .map((v, i) => (
-              <option value={v.name} key={i}>
+              <option value={`${v.name}@${v.provider?.providerName}`} key={i}>
                 {v.displayName}({v.provider?.providerName})
               </option>
             ))}
@@ -92,7 +93,7 @@ export function ModelConfigList(props: {
         ></input>
       </ListItem>
 
-      {props.modelConfig.model === "gemini-pro" ? null : (
+      {props.modelConfig?.providerName == ServiceProvider.Google ? null : (
         <>
           <ListItem
             title={Locale.Settings.PresencePenalty.Title}
@@ -208,7 +209,11 @@ export function ModelConfigList(props: {
       <ListItem title={Locale.Memory.Title} subTitle={Locale.Memory.Send}>
         <input
           type="checkbox"
-          checked={props.modelConfig.sendMemory}
+          disabled={!!process.env.NEXT_PUBLIC_DISABLE_SENDMEMORY}
+          checked={
+            !process.env.NEXT_PUBLIC_DISABLE_SENDMEMORY &&
+            props.modelConfig.sendMemory
+          }
           onChange={(e) =>
             props.updateConfig(
               (config) => (config.sendMemory = e.currentTarget.checked),

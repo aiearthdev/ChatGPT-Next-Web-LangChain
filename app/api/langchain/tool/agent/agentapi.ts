@@ -4,7 +4,7 @@ import { getServerSideConfig } from "@/app/config/server";
 import { BaseCallbackHandler } from "@langchain/core/callbacks/base";
 
 import { BufferMemory, ChatMessageHistory } from "langchain/memory";
-import { AgentExecutor } from "langchain/agents";
+import { AgentExecutor, AgentStep } from "langchain/agents";
 import { ACCESS_CODE_PREFIX, ServiceProvider } from "@/app/constant";
 
 // import * as langchainTools from "langchain/tools";
@@ -30,17 +30,23 @@ import {
 } from "@langchain/core/prompts";
 import { ChatOpenAI } from "@langchain/openai";
 import {
+  BaseMessage,
+  FunctionMessage,
+  ToolMessage,
   SystemMessage,
   HumanMessage,
   AIMessage,
 } from "@langchain/core/messages";
+import { MultimodalContent } from "@/app/client/api";
+import { GoogleCustomSearch } from "@/app/api/langchain-tools/langchian-tool-index";
 
 export interface RequestMessage {
   role: string;
-  content: string;
+  content: string | MultimodalContent[];
 }
 
 export interface RequestBody {
+  chatSessionId: string;
   messages: RequestMessage[];
   isAzure: boolean;
   azureApiVersion?: string;
@@ -222,7 +228,8 @@ export class AgentApi {
       const serverConfig = getServerSideConfig();
 
       // const reqBody: RequestBody = await req.json();
-      const isAzure = reqBody.isAzure || serverConfig.isAzure;
+      // ui set azure model provider
+      const isAzure = reqBody.isAzure;
       const authHeaderName = isAzure ? "api-key" : "Authorization";
       const authToken = req.headers.get(authHeaderName) ?? "";
       const token = authToken.trim().replaceAll("Bearer ", "").trim();
@@ -278,8 +285,11 @@ export class AgentApi {
           func: async (input: string) => serpAPITool.call(input),
         });
       }
-      if (process.env.GOOGLE_CSE_ID && process.env.GOOGLE_API_KEY) {
-        let googleCustomSearchTool = new langchainTools["GoogleCustomSearch"]();
+      if (process.env.GOOGLE_CSE_ID && process.env.GOOGLE_SEARCH_API_KEY) {
+        let googleCustomSearchTool = new GoogleCustomSearch({
+          apiKey: process.env.GOOGLE_SEARCH_API_KEY,
+          googleCSEId: process.env.GOOGLE_CSE_ID,
+        });
         searchTool = new DynamicTool({
           name: "google_custom_search",
           description: googleCustomSearchTool.description,
@@ -289,9 +299,11 @@ export class AgentApi {
 
       const tools = [];
 
+      // configure the right tool for web searching
       if (useTools.includes("web-search")) tools.push(searchTool);
       // console.log(customTools);
 
+      // include tools included in this project
       customTools.forEach((customTool) => {
         if (customTool) {
           if (useTools.includes(customTool.name)) {
@@ -300,6 +312,7 @@ export class AgentApi {
         }
       });
 
+      // include tools from Langchain community
       useTools.forEach((toolName) => {
         if (toolName) {
           var tool = langchainTools[
@@ -316,11 +329,18 @@ export class AgentApi {
       reqBody.messages
         .slice(0, reqBody.messages.length - 1)
         .forEach((message) => {
-          if (message.role === "system")
+          if (message.role === "system" && typeof message.content === "string")
             pastMessages.push(new SystemMessage(message.content));
           if (message.role === "user")
-            pastMessages.push(new HumanMessage(message.content));
-          if (message.role === "assistant")
+            typeof message.content === "string"
+              ? pastMessages.push(new HumanMessage(message.content))
+              : pastMessages.push(
+                  new HumanMessage({ content: message.content }),
+                );
+          if (
+            message.role === "assistant" &&
+            typeof message.content === "string"
+          )
             pastMessages.push(new AIMessage(message.content));
         });
 
@@ -359,9 +379,10 @@ export class AgentApi {
         returnMessages: true,
         chatHistory: new ChatMessageHistory(pastMessages),
       });
+      const MEMORY_KEY = "chat_history";
       const prompt = ChatPromptTemplate.fromMessages([
-        new MessagesPlaceholder("chat_history"),
-        ["human", "{input}"],
+        new MessagesPlaceholder(MEMORY_KEY),
+        new MessagesPlaceholder("input"),
         new MessagesPlaceholder("agent_scratchpad"),
       ]);
       const modelWithTools = llm.bind({
@@ -369,10 +390,11 @@ export class AgentApi {
       });
       const runnableAgent = RunnableSequence.from([
         {
-          input: (i: { input: string; steps: ToolsAgentStep[] }) => i.input,
-          agent_scratchpad: (i: { input: string; steps: ToolsAgentStep[] }) =>
-            formatToOpenAIToolMessages(i.steps),
-          chat_history: async (_: {
+          input: (i) => i.input,
+          agent_scratchpad: (i: { input: string; steps: ToolsAgentStep[] }) => {
+            return formatToOpenAIToolMessages(i.steps);
+          },
+          chat_history: async (i: {
             input: string;
             steps: ToolsAgentStep[];
           }) => {
@@ -389,14 +411,20 @@ export class AgentApi {
         agent: runnableAgent,
         tools,
       });
-
+      const lastMessageContent = reqBody.messages.slice(-1)[0].content;
+      const lastHumanMessage =
+        typeof lastMessageContent === "string"
+          ? new HumanMessage(lastMessageContent)
+          : new HumanMessage({ content: lastMessageContent });
       executor
-        .call(
+        .invoke(
           {
-            input: reqBody.messages.slice(-1)[0].content,
+            input: [lastHumanMessage],
             signal: this.controller.signal,
           },
-          [handler],
+          {
+            callbacks: [handler],
+          },
         )
         .catch((error) => {
           if (this.controller.signal.aborted) {

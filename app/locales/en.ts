@@ -44,6 +44,8 @@ const en: LocaleType = {
       PinToastAction: "View",
       Delete: "Delete",
       Edit: "Edit",
+      Speech: "Play",
+      StopSpeech: "Stop",
     },
     Commands: {
       new: "Start a new chat",
@@ -67,6 +69,8 @@ const en: LocaleType = {
       Settings: "Settings",
       EnablePlugins: "Enable Plugins",
       DisablePlugins: "Disable Plugins",
+      UploadImage: "Upload Images",
+      UploadFle: "Upload Files",
     },
     Rename: "Rename Chat",
     Typing: "Typing…",
@@ -78,6 +82,8 @@ const en: LocaleType = {
       return inputHints + ", / to search prompts, : to use commands";
     },
     Send: "Send",
+    StartSpeak: "Talk",
+    StopSpeak: "Stop",
     Config: {
       Reset: "Reset to Default",
       SaveAs: "Save as Mask",
@@ -128,6 +134,7 @@ const en: LocaleType = {
     DeleteChat: "Confirm to delete the selected conversation?",
     DeleteToast: "Chat Deleted",
     Revert: "Revert",
+    Search: "Search Chat",
   },
   Settings: {
     Title: "Settings",
@@ -297,7 +304,7 @@ const en: LocaleType = {
 
         Endpoint: {
           Title: "OpenAI Endpoint",
-          SubTitle: "Must starts with http(s):// or use /api/openai as default",
+          SubTitle: "Must start with http(s):// or use /api/openai as default",
         },
       },
       Azure: {
@@ -317,6 +324,62 @@ const en: LocaleType = {
           SubTitle: "Check your api version from azure console",
         },
       },
+      Anthropic: {
+        ApiKey: {
+          Title: "Anthropic API Key",
+          SubTitle:
+            "Use a custom Anthropic Key to bypass password access restrictions",
+          Placeholder: "Anthropic API Key",
+        },
+
+        Endpoint: {
+          Title: "Endpoint Address",
+          SubTitle: "Example: ",
+        },
+
+        ApiVerion: {
+          Title: "API Version (claude api version)",
+          SubTitle: "Select and input a specific API version",
+        },
+      },
+      Baidu: {
+        ApiKey: {
+          Title: "Baidu API Key",
+          SubTitle: "Use a custom Baidu API Key",
+          Placeholder: "Baidu API Key",
+        },
+        SecretKey: {
+          Title: "Baidu Secret Key",
+          SubTitle: "Use a custom Baidu Secret Key",
+          Placeholder: "Baidu Secret Key",
+        },
+        Endpoint: {
+          Title: "Endpoint Address",
+          SubTitle: "not supported, configure in .env",
+        },
+      },
+      ByteDance: {
+        ApiKey: {
+          Title: "ByteDance API Key",
+          SubTitle: "Use a custom ByteDance API Key",
+          Placeholder: "ByteDance API Key",
+        },
+        Endpoint: {
+          Title: "Endpoint Address",
+          SubTitle: "Example: ",
+        },
+      },
+      Alibaba: {
+        ApiKey: {
+          Title: "Alibaba API Key",
+          SubTitle: "Use a custom Alibaba Cloud API Key",
+          Placeholder: "Alibaba Cloud API Key",
+        },
+        Endpoint: {
+          Title: "Endpoint Address",
+          SubTitle: "Example: ",
+        },
+      },
       CustomModel: {
         Title: "Custom Models",
         SubTitle: "Custom model options, seperated by comma",
@@ -324,19 +387,22 @@ const en: LocaleType = {
       Google: {
         ApiKey: {
           Title: "API Key",
-          SubTitle:
-            "Bypass password access restrictions using a custom Google AI Studio API Key",
-          Placeholder: "Google AI Studio API Key",
+          SubTitle: "Obtain your API Key from Google AI",
+          Placeholder: "Enter your Google AI Studio API Key",
         },
 
         Endpoint: {
           Title: "Endpoint Address",
-          SubTitle: "Example:",
+          SubTitle: "Example: ",
         },
 
-        ApiVerion: {
-          Title: "API Version (gemini-pro api version)",
-          SubTitle: "Select a specific part version",
+        ApiVersion: {
+          Title: "API Version (specific to gemini-pro)",
+          SubTitle: "Select a specific API version",
+        },
+        GoogleSafetySettings: {
+          Title: "Google Safety Settings",
+          SubTitle: "Select a safety filtering level",
         },
       },
     },
@@ -376,6 +442,37 @@ const en: LocaleType = {
       ReturnIntermediateStep: {
         Title: "Return Intermediate Steps",
         SubTitle: "Return Intermediate Steps",
+      },
+    },
+    TTS: {
+      Enable: {
+        Title: "Enable TTS",
+        SubTitle: "Enable text-to-speech service",
+      },
+      Autoplay: {
+        Title: "Enable Autoplay",
+        SubTitle:
+          "Automatically generate speech and play, you need to enable the text-to-speech switch first",
+      },
+      Model: "Model",
+      Voice: {
+        Title: "Voice",
+        SubTitle: "The voice to use when generating the audio",
+      },
+      Speed: {
+        Title: "Speed",
+        SubTitle: "The speed of the generated audio",
+      },
+      Engine: "TTS Engine",
+    },
+    STT: {
+      Enable: {
+        Title: "Enable STT",
+        SubTitle: "Enable Speech-to-Text",
+      },
+      Engine: {
+        Title: "STT Engine",
+        SubTitle: "Text-to-Speech Engine",
       },
     },
   },

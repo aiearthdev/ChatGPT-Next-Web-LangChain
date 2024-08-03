@@ -4,6 +4,8 @@ import { auth } from "@/app/api/auth";
 import { NodeJSTool } from "@/app/api/langchain-tools/nodejs_tools";
 import { ModelProvider } from "@/app/constant";
 import { OpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { Embeddings } from "langchain/dist/embeddings/base";
+import { OllamaEmbeddings } from "@langchain/community/embeddings/ollama";
 
 async function handle(req: NextRequest) {
   if (req.method === "OPTIONS") {
@@ -44,6 +46,22 @@ async function handle(req: NextRequest) {
       },
       { basePath: baseUrl },
     );
+    let ragEmbeddings: Embeddings;
+    if (process.env.OLLAMA_BASE_URL) {
+      ragEmbeddings = new OllamaEmbeddings({
+        model: process.env.RAG_EMBEDDING_MODEL,
+        baseUrl: process.env.OLLAMA_BASE_URL,
+      });
+    } else {
+      ragEmbeddings = new OpenAIEmbeddings(
+        {
+          modelName:
+            process.env.RAG_EMBEDDING_MODEL ?? "text-embedding-3-large",
+          openAIApiKey: apiKey,
+        },
+        { basePath: baseUrl },
+      );
+    }
 
     var dalleCallback = async (data: string) => {
       var response = new ResponseBody();
@@ -62,6 +80,8 @@ async function handle(req: NextRequest) {
       baseUrl,
       model,
       embeddings,
+      reqBody.chatSessionId,
+      ragEmbeddings,
       dalleCallback,
     );
     var nodejsTools = await nodejsTool.getCustomTools();
@@ -79,3 +99,22 @@ export const GET = handle;
 export const POST = handle;
 
 export const runtime = "nodejs";
+export const preferredRegion = [
+  "arn1",
+  "bom1",
+  "cdg1",
+  "cle1",
+  "cpt1",
+  "dub1",
+  "fra1",
+  "gru1",
+  "hnd1",
+  "iad1",
+  "icn1",
+  "kix1",
+  "lhr1",
+  "pdx1",
+  "sfo1",
+  "sin1",
+  "syd1",
+];

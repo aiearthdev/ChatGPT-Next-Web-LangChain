@@ -37,7 +37,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import chatStyle from "./chat.module.scss";
 import { useEffect, useState } from "react";
-import { copyToClipboard, downloadAs, readFromFile } from "../utils";
+import {
+  copyToClipboard,
+  downloadAs,
+  getMessageTextContent,
+  readFromFile,
+} from "../utils";
 import { Updater } from "../typing";
 import { ModelConfigList } from "./model-config";
 import { FileName, Path } from "../constant";
@@ -74,7 +79,7 @@ function ContextPromptItem(props: {
         </Select>
       )}
       <Input
-        value={props.prompt.content}
+        value={getMessageTextContent(props.prompt)}
         type="text"
         className={chatStyle["context-content"]}
         rows={focusingInput ? 5 : 1}
@@ -163,11 +168,13 @@ export function PluginPage() {
   const chatStore = useChatStore();
 
   const currentLang = getLang();
-  const supportedLangs = ['cn', 'ru'];
+  const supportedLangs = ["cn", "ru"];
   const allPlugins = pluginStore
     .getAll()
-    .filter(
-      (m) => supportedLangs.includes(currentLang) ? m.lang === currentLang : m.lang === 'en'
+    .filter((m) =>
+      supportedLangs.includes(currentLang)
+        ? m.lang === currentLang
+        : m.lang === "en",
     );
 
   const [searchPlugins, setSearchPlugins] = useState<Plugin[]>([]);
@@ -178,7 +185,9 @@ export function PluginPage() {
   const onSearch = (text: string) => {
     setSearchText(text);
     if (text.length > 0) {
-      const result = allPlugins.filter((m) => m.name.includes(text));
+      const result = allPlugins.filter((m) =>
+        m.name.toLowerCase().includes(text.toLowerCase()),
+      );
       setSearchPlugins(result);
     } else {
       setSearchPlugins(allPlugins);
