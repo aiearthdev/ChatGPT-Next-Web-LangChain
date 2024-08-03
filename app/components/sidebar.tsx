@@ -174,7 +174,7 @@ export function SideBar(props: { className?: string }) {
     >
       <div className={styles["sidebar-header"]} data-tauri-drag-region>
         <div className={styles["sidebar-title"]} data-tauri-drag-region>
-          NextChat
+          AGI Chat
         </div>
         <div className={styles["sidebar-sub-title"]}>
           AIO智能服务平台<a href="https://aio.aiearth.dev">aio.aiearth.dev</a>AGI免费体验站领取永久免费GPT密码(不定时更新)！<a href="https://pl6pt5c18e.feishu.cn/docx/GkuNdGMNVoS9gGx1JhOcdNK7nqc">【社区福利❤使用说明🚀】</a>
